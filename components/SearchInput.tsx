@@ -7,12 +7,14 @@ interface ISearchInputProps {
   placeholder?: string;
   initialQuery?: string;
   containerStyles?: string;
+  onSubmit: (query: string) => void;
 }
 
 const SearchInput: React.FC<ISearchInputProps> = ({
   initialQuery,
   placeholder,
   containerStyles,
+  onSubmit,
 }) => {
   const [query, setQuery] = useState(initialQuery ?? "");
 
@@ -23,11 +25,15 @@ const SearchInput: React.FC<ISearchInputProps> = ({
         containerStyles
       )}
     >
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() => {
+          onSubmit(query);
+        }}
+      >
         <FontAwesome size={28} color="#C4C4C4" name="search" />
       </TouchableOpacity>
       <TextInput
-        className="text-base mt-0.5 text-white flex-1"
+        className="text-base mt-0.5 flex-1"
         value={query}
         placeholder={placeholder}
         placeholderTextColor="#cdcde0"
