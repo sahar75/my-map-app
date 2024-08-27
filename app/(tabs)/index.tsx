@@ -1,12 +1,12 @@
 import { FlatList, Pressable, RefreshControl, View } from "react-native";
 
 import EmptyState from "@/components/EmptyState";
-import { MapScreen } from "@/components/MapScreen";
+import MapScreen from "@/components/MapScreen";
 import RouteCard from "@/components/RouteCard";
 import RoutesHeader from "@/components/RoutesHeader";
 import { useRecommendationStore } from "@/store/recommendations";
 import { FontAwesome } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getRecommendations } from "@/api/recommendation";
 import { useUserLocationStore } from "@/store/userLocation";
 
@@ -17,6 +17,7 @@ export default function TabOneScreen() {
     recommendations,
     setAllRecommendations,
     setRecommendations,
+    reset,
   } = useRecommendationStore();
 
   const { userLocation } = useUserLocationStore();
@@ -38,11 +39,17 @@ export default function TabOneScreen() {
       });
   };
 
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, []);
+
   return (
     <View className="w-full h-full flex-row">
       <FlatList
         data={recommendations}
-        // keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => (
           <RouteCard
             item={item}
@@ -63,7 +70,7 @@ export default function TabOneScreen() {
         <MapScreen />
       </View>
       <Pressable
-        className="w-20 h-20 border border-gray-300 bg-white rounded-full absolute right-5 bottom-5 items-center justify-center"
+        className="w-20 h-20 border border-gray-300 bg-white rounded-full absolute left-[35%] bottom-5 items-center justify-center"
         onPress={onRefresh}
         disabled={refreshing}
       >

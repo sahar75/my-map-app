@@ -15,6 +15,7 @@ interface RecommendationState {
   setRecommendations: (recommendations: IRoute[]) => void;
   allRecommendations: IRoute[];
   setAllRecommendations: (recommendations: IRoute[]) => void;
+  reset: () => void;
 }
 
 export const useRecommendationStore = create<RecommendationState>()(
@@ -29,6 +30,12 @@ export const useRecommendationStore = create<RecommendationState>()(
         allRecommendations: [],
         setAllRecommendations: (allRecommendations) =>
           set(() => ({ allRecommendations })),
+        reset: () =>
+          set(() => ({
+            selected: 0,
+            recommendations: [],
+            allRecommendations: [],
+          })),
       }),
       {
         name: "recommendation-storage",
