@@ -20,7 +20,7 @@ const MapScreen = () => {
   const [userMarkerRotation, setUserMarkerRotation] = useState(0);
 
   const selectedRoutePoints = useMemo(
-    () => recommendations?.[selected]?.points,
+    () => recommendations?.[selected]?.points || [],
     [recommendations, selected]
   );
 
@@ -79,7 +79,7 @@ const MapScreen = () => {
     if (
       userLocation?.latitude &&
       userLocation?.longitude &&
-      !recommendations.length
+      recommendations.length === 0
     ) {
       setSelected(0);
       getRecommendations({
@@ -90,7 +90,7 @@ const MapScreen = () => {
         setRecommendations(res);
       });
     }
-  }, [userLocation.latitude]);
+  }, [userLocation]);
 
   const destination = useMemo(
     () => selectedRoutePoints?.[selectedRoutePoints.length - 1],
@@ -161,17 +161,16 @@ const MapScreen = () => {
       <MapView
         style={StyleSheet.absoluteFillObject}
         region={{
-          latitude: userLocation?.latitude,
-          longitude: userLocation?.longitude,
+          latitude: userLocation?.latitude || 0,
+          longitude: userLocation?.longitude || 0,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        followsUserLocation={true}
+        followsUserLocation
         userLocationUpdateInterval={3000}
         showsMyLocationButton
         zoomEnabled
         zoomControlEnabled
-        minZoomLevel={15}
       >
         {userMarker}
         {destinationMarker}
